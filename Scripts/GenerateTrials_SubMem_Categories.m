@@ -19,7 +19,7 @@ Window=varargin{4};
 %Set up the parameters of the experiment
 Parameters.StimulusDirectory='../Stimuli/SubMem_Categories/'; %Where are the stimuli stored?
 
-Parameters.StimulusLevelNames={'Faces','Objects','Places'}; %Which folders would you like to call from? %This needs to be in the right order
+Parameters.StimulusLevelNames={'Faces','Objects','Places'}; %Which folders would you like to call from? 
 
 StimulusLevels=length(Parameters.StimulusLevelNames); %How many different stimuli categories will you use
 
@@ -109,11 +109,11 @@ else
     Files=dir(sprintf('../Data/%s*.mat', Data.Global.SubjectID));
 end
 
-%Check to see if this particpant name is in the list, if so, remove it.
+% For all sessions with this participant's ID, first check whether or not the file is a backup version of the current session and if not, then load the file and check if we ran this experiment before
+% this just counts up previous sessions that may have had the experiment run; then we will decide whether or not we want to use this information to impact which images are shown now
 for SessionCounter=1:length(Files)
     
-    % Is there a match between this participant name and past ones, if so
-    % then dont load it
+    % Is there a match between this participant name and past ones? if so then dont load it
     if isempty(strfind(['../Data/', Files(SessionCounter).name], [Data.Global.SubjectID, '.mat']))
         
         %if it's not a backup file
@@ -123,11 +123,11 @@ for SessionCounter=1:length(Files)
             Temp=load(['../Data/', Files(SessionCounter).name], 'CompletedBlocks');
             
             
-            %But, just let the experimenter know how many OtherSessions actually had
-            %this experiment run
+            %Let the experimenter know how many OtherSessions actually had this experiment run
             if isfield(Temp.CompletedBlocks,'Experiment_SubMem_Categories')
                 num_blocks_run=sum(Temp.CompletedBlocks.Experiment_SubMem_Categories);
-                
+
+                % record this information
                 if num_blocks_run >= 1
                     OtherSessions{end+1}=Files(SessionCounter).name;
                 end
@@ -158,7 +158,7 @@ if ~isempty(OtherSessions)
 end
 
 
-%% Remove images that have been used before
+%% Remove images that have been used before, if asked to 
 %Iterate through the previous sessions and remove the images shown before
 for SessionCounter=0:length(OtherSessions)
     
@@ -274,7 +274,7 @@ for StimulusLevelCounter=1:StimulusLevels
     Temp = Shuffle(AvailableIdxs.(StimulusLevelFolders(StimulusLevelCounter).name));
     VPC_temp = Temp(1:Parameters.VPC_Trials(:,StimulusLevelCounter));
     
-    %Now save out the old and new accordingly (old is in index 1)
+    %Now save out the encoded image and novel image accordingly (old is in index 1)
     VPC_idxs.(StimulusLevelFolders(StimulusLevelCounter).name)=[SelectedIdxs.(StimulusLevelFolders(StimulusLevelCounter).name);VPC_temp];
 end
 
