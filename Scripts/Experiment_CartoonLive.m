@@ -1,12 +1,9 @@
 %% Show a movie.
 %
-% Opens a movie to be played to the infant to capture attention.
-% The movie will end if there is a key press. However, the volume buttons
-% can still be used and the left and right arrow keys can be used to
-% rewind/fastforward
+% Opens a movie to be played to the infant.
 %
 %
-%TY 01/26/2021 (identical to Experiment_Child_Play)
+% TY 01/26/2021 (identical to Experiment_Child_Play)
 
 function Data=Experiment_CartoonLive(varargin)
 
@@ -70,7 +67,7 @@ while Quit == 0
     %which block was chosen?
     ChosenVideo= PresentationOrder(1,ChosenBlock);
 
-    %If you aren't quiting then skip this
+    % If you aren't quiting, then go ahead and play the movie
     if Quit==0
 
         %What is the name of the stim selected
